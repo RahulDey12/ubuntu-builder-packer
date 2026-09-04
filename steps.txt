@@ -1,4 +1,0 @@
-Install Docker
-Configure UFW
-Install Fail2Ban
-Enable Unattendent Updates
