@@ -8,6 +8,8 @@ Created By Rahul Dey
 
 ## Prerequisites
 
+- **[Packer](https://developer.hashicorp.com/packer/install) must be installed**
+  locally to run these builds.
 - **The build user must have passwordless (`NOPASSWD`) sudo.** `setup.sh`,
   `security.sh`, and `install_docker.sh` all run many `sudo` commands
   non-interactively — there's no TTY for a sudo password prompt, so the
