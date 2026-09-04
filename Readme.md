@@ -12,12 +12,14 @@ Created By Rahul Dey
   `security.sh`, and `install_docker.sh` all run many `sudo` commands
   non-interactively — there's no TTY for a sudo password prompt, so the
   build will hang/fail if one is required.
-  - **QEMU build**: handled automatically — cloud-init (`cd-rom/user-data`)
-    creates the `ubuntu` user with `sudo: ALL=(ALL) NOPASSWD:ALL`.
-  - **SSH build (`null.ssh`)**: Packer connects to an *existing* server, so
-    it does not create or configure the user for you — make sure the
-    `ssh_username` you pass already has `NOPASSWD` sudo configured on that
-    server before running the build.
+  - **QEMU build**: handled automatically — the `sudo: ALL=(ALL) NOPASSWD:ALL`
+    line in `cd-rom/user-data` (cloud-init) is what grants this to the
+    `ubuntu` user. Update that file if you change the cloud-init username.
+  - **SSH build (`null.ssh`)**: there's no equivalent file in this repo —
+    Packer connects to an *existing* server, so it does not create or
+    configure the user for you. `NOPASSWD` sudo for the `ssh_username` you
+    pass must already be set up on that server (typically in
+    `/etc/sudoers.d/` on the target) before running the build.
 
 ## Get Started
 
