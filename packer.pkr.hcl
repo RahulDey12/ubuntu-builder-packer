@@ -86,6 +86,8 @@ build {
   provisioner "shell" {
     environment_vars = [
       "DEBIAN_FRONTEND=noninteractive",
+      "SSH_PORT=${var.ssh_port}",
+      "ENABLE_PASSWORD_AUTH=${length(var.ssh_password) > 0 ? "true" : "false"}",
     ]
     scripts = [
       "scripts/setup.sh",

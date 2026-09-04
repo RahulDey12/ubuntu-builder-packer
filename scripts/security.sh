@@ -4,10 +4,17 @@ set -e
 echo "[SECURITY] Install UFW & Fail2Ban..."
 sudo apt-get install -y ufw fail2ban unattended-upgrades
 
+SSH_PORT="${SSH_PORT:-22}"
+
 echo "[SECURITY] Configure UFW (deny inbound, allow SSH/HTTP/HTTPS)..."
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
-sudo ufw allow OpenSSH
+if [ "$SSH_PORT" = "22" ]; then
+  sudo ufw allow OpenSSH
+else
+  echo "[SECURITY] Non-default SSH port detected, allowing ${SSH_PORT}/tcp..."
+  sudo ufw allow "${SSH_PORT}/tcp"
+fi
 sudo ufw allow 80/tcp
 sudo ufw allow 443/tcp
 sudo ufw --force enable
@@ -16,6 +23,16 @@ echo "[SECURITY] Harden SSH (disable root login)..."
 sudo mv /tmp/secure_sshd_config.conf /etc/ssh/sshd_config.d/99-secure.conf
 sudo chown root:root /etc/ssh/sshd_config.d/99-secure.conf
 sudo chmod 644 /etc/ssh/sshd_config.d/99-secure.conf
+
+ENABLE_PASSWORD_AUTH="${ENABLE_PASSWORD_AUTH:-false}"
+if [ "$ENABLE_PASSWORD_AUTH" = "true" ]; then
+  echo "[SECURITY] Password authentication in use, keeping it enabled..."
+  sudo sed -i \
+    -e 's/^AuthenticationMethods .*/AuthenticationMethods any/' \
+    -e 's/^#\s*PasswordAuthentication .*/PasswordAuthentication yes/' \
+    /etc/ssh/sshd_config.d/99-secure.conf
+fi
+
 # Test SSH config for errors before restarting
 sudo sshd -t
 echo "[SECURITY] Restart SSH to apply changes..."
