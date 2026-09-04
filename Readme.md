@@ -33,3 +33,7 @@ packer build -only=qemu.ubuntu-24 .
   where you're comfortable with password login being allowed after the
   build finishes — rotate/disable it afterwards if you don't need it
   long-term.
+- `ssh_username`: if set to `root`, root login is left enabled
+  (`PermitRootLogin yes`) instead of the default `no`. **This is not
+  recommended** — only use a `root` build user when you specifically
+  need it, and prefer a non-root `ssh_username` otherwise.

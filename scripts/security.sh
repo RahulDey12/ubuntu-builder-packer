@@ -33,6 +33,14 @@ if [ "$ENABLE_PASSWORD_AUTH" = "true" ]; then
     /etc/ssh/sshd_config.d/99-secure.conf
 fi
 
+ENABLE_ROOT_LOGIN="${ENABLE_ROOT_LOGIN:-false}"
+if [ "$ENABLE_ROOT_LOGIN" = "true" ]; then
+  echo "[SECURITY] WARNING: ssh_username is 'root', keeping root login enabled (not recommended)..."
+  sudo sed -i \
+    -e 's/^PermitRootLogin .*/PermitRootLogin yes/' \
+    /etc/ssh/sshd_config.d/99-secure.conf
+fi
+
 # Test SSH config for errors before restarting
 sudo sshd -t
 echo "[SECURITY] Restart SSH to apply changes..."
