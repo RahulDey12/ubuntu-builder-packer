@@ -27,6 +27,18 @@ Created By Rahul Dey
 packer build -only=null.ssh -var 'ssh_host={server_ip}' -var 'ssh_private_key_file={private_key_file_path}' .
 ```
 
+Optional vars for non-default setups (see [Security Heads-Up](#️-security-heads-up)):
+
+```bash
+packer build -only=null.ssh \
+  -var 'ssh_host={server_ip}' \
+  -var 'ssh_username={username}' \
+  -var 'ssh_port={port}' \
+  -var 'ssh_private_key_file={private_key_file_path}' \
+  -var 'ssh_password={password}' \
+  .
+```
+
 ### Build on QEMU
 
 ```bash
